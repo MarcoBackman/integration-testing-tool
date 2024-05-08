@@ -13,14 +13,21 @@ services:
       test: nc -z localhost 2181 || exit -1
       interval: 10s
       timeout: 5s
-      retries: 3
-      start_period: 5s
+      retries: 5
+      start_period: 15s
+    restart: on-failure
   kafka:
     image: confluentinc/cp-server:7.2.1
     hostname: kafka
     container_name: kafka
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: kafka-topics --bootstrap-server broker:9092 --list
+      interval: 10s
+      timeout: 10s
+      retries: 3
     ports:
       - "9092:9092"
       - "9997:9997"
@@ -40,8 +47,8 @@ services:
   kafka-init-topics:
     image: confluentinc/cp-kafka:7.2.1
     volumes:
-      - ./:/var/www:rwx #read only
-      - ./Dockerfile/data/message.json:/data/message.json
+      - ./:/var/www:ro #read only
+      - ./data/:/data/message.json
     depends_on:
       - kafka
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
