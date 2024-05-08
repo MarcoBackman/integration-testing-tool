@@ -39,7 +39,7 @@ SQL_SCRIPT_PATH={your_sql_script_file_path};
 
 ---
 
-### Test Kafka it runs well
+### Test Kafka
 First check if docker images(zookeeper, kafka, kafka-ui) are running
 
 Enter this url in your browser to see kafka ui with a broker online
