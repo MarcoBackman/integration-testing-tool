@@ -1,4 +1,4 @@
-version: '3.7'
+version: '2.7'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
@@ -56,7 +56,6 @@ services:
                kafka-topics --create --topic bankTopic --partitions 3 --replication-factor 1 --if-not-exists --bootstrap-server kafka:29092 && \
                kafka-topics --create --topic user --partitions 2 --replication-factor 1 --if-not-exists --bootstrap-server kafka:29092 && \
                kafka-console-producer --bootstrap-server kafka:29092 --topic users < /data/message.json'"
-
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
@@ -71,3 +70,34 @@ services:
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
       DYNAMIC_CONFIG_ENABLED: 'true'
+  db:
+    container_name: db
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    build: utils/sql/
+    environment:
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=${DB_NAME}
+        - "ES_JAVA_OPTS=-Xms1024m -Xmx3072m"
+        #this ENV variable is only required for the healthcheck section - if you don't specify it, the check command will fail stating the root user doesn't exist in posgres
+        - PGUSER=postgres
+    restart: always
+    command: postgres
+    #this command checks if the database is ready, right on the source db server
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - "../data/postgres-data:/var/lib/postgresql/data"
+  web:
+    build: "../dockerfile/"
+    ports:
+      - "80:8000"
+    depends_on:
+      #Without calling db separately like this, init stage will automatically terminate psql process.
+      db:
+        condition: service_completed_successfully
