@@ -85,10 +85,10 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>10.7.1</version>
                 <configuration>
-                    <user>postgres</user>
-                    <password>postgres</password>
+                    <user>${DB_USER}</user>
+                    <password>${DB_PASSWORD}</password>
                     <schemas>
-                        <schema>bank-demo</schema>
+                        <schema>${DB_NAME}</schema>
                     </schemas>
                 </configuration>
             </plugin>
