@@ -72,7 +72,7 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
   db:
     container_name: db
-    image: postgres:14
+    image: postgres:16
     ports:
       - "5432:5432"
     build: utils/sql/
@@ -83,6 +83,7 @@ services:
         - "ES_JAVA_OPTS=-Xms1024m -Xmx3072m"
         #this ENV variable is only required for the healthcheck section - if you don't specify it, the check command will fail stating the root user doesn't exist in posgres
         - PGUSER=postgres
+        - POSTGRES_HOST_AUTH_METHOD=trust
     restart: always
     command: postgres
     #this command checks if the database is ready, right on the source db server
@@ -101,3 +102,11 @@ services:
       #Without calling db separately like this, init stage will automatically terminate psql process.
       db:
         condition: service_completed_successfully
+  flyway:
+    image: flyway/flyway:10.7
+    command: -url=jdbc:postgresql://db:5432/${DB_NAME}  -connectRetries=1 -schemas=public -user=${DB_USER} -password=${DB_PASSWORD} migrate -X
+    volumes:
+      - ./db/migration:/flyway/sql
+    depends_on:
+      db:
+        condition: service_healthy
