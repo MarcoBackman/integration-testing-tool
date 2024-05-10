@@ -43,6 +43,16 @@ SQL_SCRIPT_PATH={your_sql_script_file_path};
 First check if docker images(zookeeper, kafka, kafka-ui) are running
 
 Enter this url in your browser to see kafka ui with a broker online
-http://localhost:8080/ui/clusters/
+[Local host kafka-ui(port 8080)](http://localhost:8080/ui/clusters/)
 
 ![kafka-ui (browser)](img/kafka-ui.PNG)
+
+
+### Test flyway for your script validation
+When your environment variable for sql script path(`${SQL_SCRIPT_PATH}`) is set correctly, then flyway will give you the results of the script validation.
+
+![flyway-docker (browser)](img/flyway.PNG)
+
+Please follow the link for additional information on flyway script file naming convention.
+
+[Flyway naming convention link](https://www.red-gate.com/blog/database-devops/flyway-naming-patterns-matter)
