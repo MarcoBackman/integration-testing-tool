@@ -8,6 +8,10 @@ Integration testing tool for core bank service (demo)
 4. Download this repository "integration-testing-tool".
 5. Run BankIntegrationTestingApplication after setting the properties like below.
 
+(Optional)
+6. Download bank-core-system repository to utilize integration testing tool features.
+[BankCoreDemo](https://github.com/MarcoBackman/bankcoresystem.git)
+
 ---
 
 ## Java Spring configuration
