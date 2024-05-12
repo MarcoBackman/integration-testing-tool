@@ -2,8 +2,11 @@ Integration testing tool for core bank service (demo)
 ---
 ## Prerequisites
 
-1. install docker in your local machine [install docker](https://docs.docker.com/desktop/install/)
-2. install kafka service "# integration-testing-tool" 
+1. Install docker in your local machine [install docker](https://docs.docker.com/desktop/install/)
+2. Execute docker, either run docker desktop or in console. Check `docker ps ` command works in your command prompt.
+3. Make sure your local machine is not running any programs at the same port. You may change your port programmatically.
+4. Download this repository "integration-testing-tool".
+5. Run BankIntegrationTestingApplication after setting the properties like below.
 
 ---
 
