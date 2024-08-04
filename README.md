@@ -1,4 +1,17 @@
 Integration testing tool for core bank service (demo)
+
+---
+## Supporting service list
+
+- postgresql db
+- zookeeper
+- kafka server
+- kafka topic initializer
+- kafka ui
+- load local docker files
+- flyway
+- redis
+
 ---
 ## Prerequisites
 
